@@ -49,14 +49,41 @@ const documents = [
   }
 ];
 
-// Informacje o ubezpieczeniu
-const insuranceInfo = {
-  company: "BezpiecznyMaluch S.A.",
-  policyNumber: "ZŁ/2025/1234",
-  coveragePeriod: "01.01.2025 - 31.12.2025",
-  contactPhone: "800 123 456",
-  email: "kontakt@bezpiecznymaluch.pl"
-};
+// Dokumenty związane z ubezpieczeniem
+const insuranceDocuments = [
+  {
+    id: "ins1",
+    title: "Polisa ubezpieczeniowa",
+    description: "Aktualna polisa ubezpieczeniowa żłobka na rok 2025.",
+    fileType: "PDF",
+    fileSize: "245KB",
+    downloadUrl: "#"
+  },
+  {
+    id: "ins2",
+    title: "Ogólne warunki ubezpieczenia",
+    description: "Pełne warunki ubezpieczenia wraz z zakresem ochrony i wyłączeniami.",
+    fileType: "PDF",
+    fileSize: "520KB",
+    downloadUrl: "#"
+  },
+  {
+    id: "ins3",
+    title: "Procedura zgłoszenia szkody",
+    description: "Instrukcja postępowania w przypadku wystąpienia wypadku.",
+    fileType: "PDF",
+    fileSize: "186KB",
+    downloadUrl: "#"
+  },
+  {
+    id: "ins4",
+    title: "Formularz zgłoszenia szkody",
+    description: "Dokument do wypełnienia w przypadku wystąpienia wypadku.",
+    fileType: "PDF",
+    fileSize: "132KB",
+    downloadUrl: "#"
+  }
+];
 
 const Documents = () => {
   return (
@@ -105,60 +132,41 @@ const Documents = () => {
               <Shield className="mr-2 h-6 w-6" />
               Ubezpieczenie
             </h2>
-            <div className="max-w-3xl">
+            <div className="max-w-3xl mb-8">
               <p className="mb-6 text-gray-700">
                 Wszystkie dzieci uczęszczające do naszego żłobka są objęte grupowym ubezpieczeniem NNW. 
                 Ubezpieczenie zapewnia ochronę w przypadku nieszczęśliwych wypadków na terenie żłobka oraz 
                 podczas wycieczek organizowanych przez placówkę.
               </p>
+            </div>
 
-              <div className="bg-green-50 p-6 rounded-lg border border-green-200">
-                <h3 className="text-xl font-medium text-green-700 mb-4">Informacje o ubezpieczeniu</h3>
-                <div className="space-y-3 text-gray-700">
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium">Ubezpieczyciel:</span>
-                    <span>{insuranceInfo.company}</span>
-                  </div>
-                  <Separator className="bg-green-200" />
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium">Numer polisy:</span>
-                    <span>{insuranceInfo.policyNumber}</span>
-                  </div>
-                  <Separator className="bg-green-200" />
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium">Okres ubezpieczenia:</span>
-                    <span>{insuranceInfo.coveragePeriod}</span>
-                  </div>
-                  <Separator className="bg-green-200" />
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium">Telefon kontaktowy:</span>
-                    <span>{insuranceInfo.contactPhone}</span>
-                  </div>
-                  <Separator className="bg-green-200" />
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium">Email:</span>
-                    <span>{insuranceInfo.email}</span>
-                  </div>
-                </div>
-              </div>
+            <h3 className="text-xl font-medium text-green-700 mb-4">Dokumenty ubezpieczeniowe:</h3>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {insuranceDocuments.map((doc) => (
+                <Card key={doc.id} className="border-green-200 hover:shadow-md transition-shadow duration-300">
+                  <CardHeader>
+                    <CardTitle className="text-xl text-green-700">{doc.title}</CardTitle>
+                    <CardDescription>{doc.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-sm text-gray-600">
+                      <span className="font-medium">Format: </span>{doc.fileType} • <span className="font-medium">Rozmiar: </span>{doc.fileSize}
+                    </div>
+                  </CardContent>
+                  <CardFooter>
+                    <Button className="w-full bg-green-600 hover:bg-green-700">
+                      <Download className="mr-2 h-4 w-4" /> Pobierz dokument
+                    </Button>
+                  </CardFooter>
+                </Card>
+              ))}
+            </div>
 
-              <div className="mt-8">
-                <p className="text-gray-700 mb-4">
-                  W przypadku wypadku, należy:
-                </p>
-                <ol className="list-decimal pl-5 space-y-2 text-gray-700">
-                  <li>Niezwłocznie poinformować personel żłobka o zaistniałej sytuacji.</li>
-                  <li>Wypełnić formularz zgłoszenia szkody (dostępny w sekretariacie).</li>
-                  <li>Skontaktować się z ubezpieczycielem pod podanymi numerami telefonów.</li>
-                </ol>
-              </div>
-
-              <div className="mt-8 bg-yellow-50 p-4 rounded-lg border border-yellow-200">
-                <p className="text-yellow-700">
-                  <strong>Ważne:</strong> Szczegółowe warunki ubezpieczenia, w tym zakres ochrony i wyłączenia, 
-                  dostępne są w sekretariacie żłobka. Zachęcamy rodziców do zapoznania się z pełną treścią polisy.
-                </p>
-              </div>
+            <div className="mt-8 bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+              <p className="text-yellow-700">
+                <strong>Ważne:</strong> W przypadku wypadku należy niezwłocznie poinformować personel żłobka oraz wypełnić
+                formularz zgłoszenia szkody dostępny powyżej lub w sekretariacie placówki.
+              </p>
             </div>
           </div>
         </div>

@@ -2,18 +2,23 @@
 import React, { useState } from "react";
 import { useTeachers, useTeacherAvailability } from "@/hooks/useTeachers";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Calendar } from "lucide-react";
+import { Calendar, Search } from "lucide-react";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { Check } from "lucide-react";
 
 const TeacherAvailability = () => {
+  const [open, setOpen] = useState(false);
   const [selectedTeacherId, setSelectedTeacherId] = useState<string>("");
+  const [searchValue, setSearchValue] = useState("");
   const { data: teachers = [], isLoading: isLoadingTeachers } = useTeachers();
   const { data: availabilities = [], isLoading: isLoadingAvailability } = useTeacherAvailability(selectedTeacherId);
 
-  const handleTeacherChange = (value: string) => {
-    setSelectedTeacherId(value);
-  };
+  // Znajdź dane nauczyciela po ID
+  const selectedTeacher = teachers.find(teacher => teacher.id === selectedTeacherId);
 
   // Nazwy dni tygodnia
   const daysOfWeek = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek"];
@@ -44,18 +49,56 @@ const TeacherAvailability = () => {
               {isLoadingTeachers ? (
                 <Skeleton className="h-10 w-full rounded-md" />
               ) : (
-                <Select onValueChange={handleTeacherChange} value={selectedTeacherId}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Wybierz nauczyciela" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {teachers.map((teacher) => (
-                      <SelectItem key={teacher.id} value={teacher.id}>
-                        {teacher.name} - {teacher.position}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <Popover open={open} onOpenChange={setOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={open}
+                      className="w-full justify-between"
+                    >
+                      {selectedTeacher ? (
+                        `${selectedTeacher.name} - ${selectedTeacher.position}`
+                      ) : (
+                        "Wybierz nauczyciela"
+                      )}
+                      <Search className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-full p-0" align="start" side="bottom">
+                    <Command>
+                      <CommandInput 
+                        placeholder="Wyszukaj nauczyciela..." 
+                        value={searchValue}
+                        onValueChange={setSearchValue}
+                      />
+                      <CommandList>
+                        <CommandEmpty>Nie znaleziono nauczycieli</CommandEmpty>
+                        <CommandGroup>
+                          {teachers.map((teacher) => (
+                            <CommandItem
+                              key={teacher.id}
+                              value={teacher.name}
+                              onSelect={() => {
+                                setSelectedTeacherId(teacher.id);
+                                setSearchValue("");
+                                setOpen(false);
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  selectedTeacherId === teacher.id ? "opacity-100" : "opacity-0"
+                                )}
+                              />
+                              {teacher.name} - {teacher.position}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
               )}
             </div>
 

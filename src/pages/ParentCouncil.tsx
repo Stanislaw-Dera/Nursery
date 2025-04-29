@@ -18,43 +18,6 @@ const ParentCouncil = () => {
       {/* Sekcja główna */}
       <section className="py-12">
         <div className="container mx-auto px-4">
-          {/* Informacje ogólne */}
-          <Card className="mb-8">
-            <CardHeader className="bg-green-50">
-              <CardTitle className="flex items-center text-2xl text-green-700">
-                <Users className="mr-2 h-6 w-6" />
-                O radzie rodziców
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="pt-6">
-              <div className="space-y-4 text-gray-700">
-                <p>
-                  Rada rodziców to organ przedstawicielski rodziców dzieci uczęszczających do naszego żłobka. 
-                  Współpracuje ona z dyrekcją i personelem żłobka w celu doskonalenia organizacji i warunków pracy placówki.
-                </p>
-                <p>
-                  Rada rodziców jest wybierana na początku każdego roku szkolnego w demokratycznych wyborach. 
-                  Składa się z przedstawicieli rodziców z każdej grupy wiekowej.
-                </p>
-                <p>
-                  Głównym zadaniem rady jest reprezentowanie interesów wszystkich rodziców oraz wspieranie 
-                  placówki w realizacji jej statutowych zadań związanych z opieką, wychowaniem i edukacją dzieci.
-                </p>
-              </div>
-
-              <div className="mt-8">
-                <h3 className="text-xl font-semibold text-green-700 mb-4">Zadania rady rodziców:</h3>
-                <ul className="list-disc pl-5 space-y-2 text-gray-700">
-                  <li>Współpraca z dyrekcją i personelem żłobka</li>
-                  <li>Organizacja i wsparcie wydarzeń okolicznościowych</li>
-                  <li>Opiniowanie ważnych decyzji dotyczących funkcjonowania placówki</li>
-                  <li>Gromadzenie funduszy na dodatkowe wyposażenie i pomoce dydaktyczne</li>
-                  <li>Organizacja zajęć dodatkowych i atrakcji dla dzieci</li>
-                </ul>
-              </div>
-            </CardContent>
-          </Card>
-
           {/* Skład rady */}
           <Card className="mb-8">
             <CardHeader className="bg-green-50">

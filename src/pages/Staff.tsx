@@ -3,10 +3,51 @@ import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTeachers } from "@/hooks/useTeachers";
 import { Skeleton } from "@/components/ui/skeleton";
-import { UserCheck } from "lucide-react";
+import { UserCheck, UserCircle2, GraduationCap, Brain, BarChart3 } from "lucide-react";
 
 const Staff = () => {
   const { data: teachers = [], isLoading } = useTeachers();
+
+  // Grupowanie nauczycieli według stanowisk
+  const directors = teachers.filter(teacher => 
+    teacher.position.toLowerCase().includes("dyrektor"));
+  const viceDirectors = teachers.filter(teacher => 
+    teacher.position.toLowerCase().includes("wicedyrektor") || 
+    teacher.position.toLowerCase().includes("zastępca dyrektora"));
+  const teachers_therapists = teachers.filter(teacher => 
+    (teacher.position.toLowerCase().includes("nauczyciel") || 
+     teacher.position.toLowerCase().includes("terapeut")) && 
+    !teacher.position.toLowerCase().includes("dyrektor"));
+  const speechTherapists = teachers.filter(teacher => 
+    teacher.position.toLowerCase().includes("logoped"));
+  const otherStaff = teachers.filter(teacher => 
+    !teacher.position.toLowerCase().includes("dyrektor") && 
+    !teacher.position.toLowerCase().includes("nauczyciel") && 
+    !teacher.position.toLowerCase().includes("terapeut") && 
+    !teacher.position.toLowerCase().includes("logoped"));
+
+  // Renderowanie sekcji z personelem
+  const renderStaffSection = (title, staffList, icon) => (
+    <div className="mb-12">
+      <div className="flex items-center mb-4">
+        {icon}
+        <h3 className="text-xl font-bold text-green-700 ml-2">{title}</h3>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {staffList.map((person) => (
+          <Card key={person.id} className="hover:shadow-lg transition-shadow">
+            <CardHeader>
+              <CardTitle className="text-xl text-green-700">{person.name}</CardTitle>
+              <CardDescription className="font-medium">{person.position}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-700">{person.bio}</p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-green-50">
@@ -34,48 +75,64 @@ const Staff = () => {
             </p>
           </div>
 
-          {/* Lista pracowników */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {isLoading ? (
-              // Skeletony podczas ładowania
-              Array(6).fill(0).map((_, index) => (
-                <Card key={index} className="overflow-hidden">
-                  <div className="aspect-[3/2] w-full">
-                    <Skeleton className="h-full w-full" />
+          {isLoading ? (
+            // Skeletony podczas ładowania
+            <div className="space-y-8">
+              {[1, 2, 3].map((section) => (
+                <div key={section}>
+                  <Skeleton className="h-8 w-48 mb-4" />
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {Array(3).fill(0).map((_, index) => (
+                      <Card key={index}>
+                        <CardHeader>
+                          <Skeleton className="h-6 w-2/3 mb-1" />
+                          <Skeleton className="h-4 w-1/2" />
+                        </CardHeader>
+                        <CardContent>
+                          <Skeleton className="h-4 w-full mb-2" />
+                          <Skeleton className="h-4 w-full mb-2" />
+                          <Skeleton className="h-4 w-2/3" />
+                        </CardContent>
+                      </Card>
+                    ))}
                   </div>
-                  <CardHeader>
-                    <Skeleton className="h-6 w-2/3 mb-1" />
-                    <Skeleton className="h-4 w-1/2" />
-                  </CardHeader>
-                  <CardContent>
-                    <Skeleton className="h-4 w-full mb-2" />
-                    <Skeleton className="h-4 w-full mb-2" />
-                    <Skeleton className="h-4 w-2/3" />
-                  </CardContent>
-                </Card>
-              ))
-            ) : (
-              // Karty pracowników
-              teachers.map((teacher) => (
-                <Card key={teacher.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                  <div className="aspect-[3/2] w-full overflow-hidden">
-                    <img 
-                      src={teacher.imageUrl || "/placeholder.svg"} 
-                      alt={teacher.name}
-                      className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                    />
-                  </div>
-                  <CardHeader>
-                    <CardTitle className="text-xl text-green-700">{teacher.name}</CardTitle>
-                    <CardDescription className="font-medium">{teacher.position}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-700">{teacher.bio}</p>
-                  </CardContent>
-                </Card>
-              ))
-            )}
-          </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            // Sekcje personelu
+            <div>
+              {directors.length > 0 && renderStaffSection(
+                "Dyrektor", 
+                directors, 
+                <UserCircle2 className="h-6 w-6 text-green-700" />
+              )}
+              
+              {viceDirectors.length > 0 && renderStaffSection(
+                "Wicedyrektor", 
+                viceDirectors, 
+                <BarChart3 className="h-6 w-6 text-green-700" />
+              )}
+              
+              {teachers_therapists.length > 0 && renderStaffSection(
+                "Nauczyciele i Terapeuci", 
+                teachers_therapists, 
+                <GraduationCap className="h-6 w-6 text-green-700" />
+              )}
+              
+              {speechTherapists.length > 0 && renderStaffSection(
+                "Logopedzi", 
+                speechTherapists, 
+                <Brain className="h-6 w-6 text-green-700" />
+              )}
+              
+              {otherStaff.length > 0 && renderStaffSection(
+                "Pozostały personel", 
+                otherStaff, 
+                <UserCheck className="h-6 w-6 text-green-700" />
+              )}
+            </div>
+          )}
 
           {/* Dodatkowe informacje */}
           <div className="mt-12 max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
