@@ -6,8 +6,15 @@ import { formatDate } from "@/lib/utils";
 import { useLatestNews } from "@/hooks/useNews";
 
 const NewsPreview = () => {
-  // W przyszłości można zamienić na dane z API/bazy danych
-  const { news } = useLatestNews(3); // Pobierz 3 najnowsze aktualności
+  const { news, isLoading, error } = useLatestNews(3); // Pobierz 3 najnowsze aktualności
+
+  if (isLoading) {
+    return <p>Ładowanie aktualności...</p>;
+  }
+
+  if (error) {
+    return <p>Wystąpił błąd podczas ładowania aktualności.</p>;
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

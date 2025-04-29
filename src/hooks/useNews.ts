@@ -132,9 +132,10 @@ export const useNewsById = (id: string) => {
 
 // Hook do pobierania ograniczonej liczby najnowszych aktualności
 export const useLatestNews = (limit: number = 3) => {
-  const { data: allNews = [], isLoading, error } = useAllNews();
+  const result = useAllNews();
+  const { data, isLoading, error } = result;
   
-  const news = allNews.slice(0, limit);
+  const news = data ? data.slice(0, limit) : [];
   
   return { news, isLoading, error };
 };

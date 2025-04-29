@@ -8,7 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const NewsDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const { newsItem, isLoading, error } = useNewsById(id || "");
+  const { data: newsItem, isLoading, error } = useNewsById(id || "");
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -71,14 +71,6 @@ const NewsDetail = () => {
           ) : null}
         </div>
       </section>
-
-      {/* Stopka */}
-      <footer className="bg-purple-800 text-white py-8 mt-auto">
-        <div className="container mx-auto px-4 text-center">
-          <p>© 2025 Żłobek Małe Skarby. Wszelkie prawa zastrzeżone.</p>
-          <p className="mt-2">ul. Kwiatowa 5, 00-001 Warszawa | Tel: 123 456 789 | Email: kontakt@maleskarby.pl</p>
-        </div>
-      </footer>
     </div>
   );
 };
