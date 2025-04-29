@@ -1,138 +1,140 @@
 
-import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { NewsItem } from "@/types/news";
 
-// Dane testowe - w przyszłości można zamienić na API/bazę danych
+// Przykładowe dane aktualności (w przyszłości można zamienić na API)
 const mockNews: NewsItem[] = [
   {
     id: "1",
-    title: "Dzień otwarty w żłobku",
-    date: new Date("2025-05-15"),
-    excerpt: "Zapraszamy wszystkich zainteresowanych na dzień otwarty w naszym żłobku. Będzie można poznać kadrę, obejrzeć pomieszczenia i dowiedzieć się więcej o naszym programie.",
+    title: "Zapisy na nowy rok szkolny",
+    date: new Date("2025-04-15"),
+    excerpt: "Informujemy, że rozpoczęliśmy zapisy na nowy rok szkolny 2025/2026. Zapraszamy rodziców do składania dokumentów.",
     content: `
-      <p>Zapraszamy wszystkich zainteresowanych na dzień otwarty w naszym żłobku. Będzie można poznać kadrę, obejrzeć pomieszczenia i dowiedzieć się więcej o naszym programie.</p>
-      <p>W programie:</p>
+      <p>Szanowni Rodzice,</p>
+      <p>Z przyjemnością informujemy, że od 15 kwietnia rozpoczynamy zapisy do naszego żłobka na rok szkolny 2025/2026.</p>
+      <p>Wymagane dokumenty:</p>
       <ul>
-        <li>Prezentacja naszej kadry</li>
-        <li>Oprowadzanie po żłobku</li>
-        <li>Konsultacje z opiekunami</li>
-        <li>Zabawy dla dzieci</li>
+        <li>Formularz zgłoszeniowy (dostępny w zakładce Dokumenty)</li>
+        <li>Karta informacyjna o dziecku</li>
+        <li>Kopia książeczki zdrowia dziecka z aktualnymi szczepieniami</li>
       </ul>
-      <p>Wydarzenie odbędzie się 15 maja 2025 roku w godzinach 10:00-16:00. Nie wymagamy wcześniejszej rejestracji, wystarczy przyjść.</p>
+      <p>Zapisy prowadzone są w sekretariacie żłobka w godzinach 8:00-16:00 od poniedziałku do piątku.</p>
+      <p>Liczba miejsc jest ograniczona, decyduje kolejność zgłoszeń.</p>
     `
   },
   {
     id: "2",
-    title: "Warsztaty sensoryczne dla maluchów",
-    date: new Date("2025-05-10"),
-    excerpt: "W najbliższą sobotę organizujemy warsztaty sensoryczne dla maluchów. Będzie to świetna okazja do wspólnej zabawy i rozwijania zmysłów dziecka.",
+    title: "Dzień Rodziny w żłobku",
+    date: new Date("2025-04-10"),
+    excerpt: "Zapraszamy wszystkich rodziców na wspólne świętowanie Dnia Rodziny, które odbędzie się w naszym ogrodzie.",
     content: `
-      <p>W najbliższą sobotę organizujemy warsztaty sensoryczne dla maluchów. Będzie to świetna okazja do wspólnej zabawy i rozwijania zmysłów dziecka.</p>
-      <p>Podczas warsztatów dzieci będą mogły:</p>
+      <p>Drodzy Rodzice,</p>
+      <p>Z okazji zbliżającego się Dnia Matki i Dnia Ojca organizujemy wspólne świętowanie Dnia Rodziny w naszym żłobku.</p>
+      <p><strong>Kiedy:</strong> 25 maja 2025, godz. 10:00-13:00</p>
+      <p><strong>Gdzie:</strong> Ogród żłobkowy (w przypadku deszczu sala gimnastyczna)</p>
+      <p><strong>W programie:</strong></p>
       <ul>
-        <li>Poznawać różne faktury i materiały</li>
-        <li>Bawić się masą solną i piaskiem kinetycznym</li>
-        <li>Eksperymentować z kolorami</li>
-        <li>Rozwijać motorykę małą</li>
+        <li>Występy artystyczne dzieci</li>
+        <li>Wspólne gry i zabawy</li>
+        <li>Poczęstunek</li>
+        <li>Niespodzianka dla rodziców</li>
       </ul>
-      <p>Warsztaty poprowadzi nasza doświadczona pedagog, Pani Anna. Zapraszamy!</p>
+      <p>Prosimy o potwierdzenie obecności u wychowawców grup do 20 maja.</p>
+      <p>Serdecznie zapraszamy!</p>
     `
   },
   {
     id: "3",
-    title: "Nowy program zajęć muzycznych",
-    date: new Date("2025-05-05"),
-    excerpt: "Z radością informujemy o wprowadzeniu nowego programu zajęć muzycznych dla naszych podopiecznych. Zajęcia będą prowadzone przez profesjonalnego muzyka.",
+    title: "Warsztaty sensoryczne dla maluchów",
+    date: new Date("2025-04-05"),
+    excerpt: "W najbliższym miesiącu rozpoczynamy cykl warsztatów sensorycznych dla najmłodszych dzieci. Sprawdź szczegóły.",
     content: `
-      <p>Z radością informujemy o wprowadzeniu nowego programu zajęć muzycznych dla naszych podopiecznych. Zajęcia będą prowadzone przez profesjonalnego muzyka.</p>
-      <p>Program zajęć obejmuje:</p>
+      <p>Szanowni Rodzice,</p>
+      <p>Z radością informujemy, że od maja rozpoczynamy cykl warsztatów sensorycznych dla dzieci w wieku 1-3 lat.</p>
+      <p>Warsztaty będą odbywać się raz w tygodniu (w każdy wtorek) i będą prowadzone przez specjalistę integracji sensorycznej.</p>
+      <p><strong>Korzyści dla dzieci:</strong></p>
       <ul>
-        <li>Śpiewanie piosenek dostosowanych do wieku dzieci</li>
-        <li>Zabawę z prostymi instrumentami</li>
-        <li>Rytmikę i ruch przy muzyce</li>
-        <li>Słuchanie różnych gatunków muzycznych</li>
+        <li>Rozwój koordynacji wzrokowo-ruchowej</li>
+        <li>Stymulacja zmysłów</li>
+        <li>Wsparcie rozwoju motorycznego</li>
+        <li>Nauka poprzez doświadczanie</li>
       </ul>
-      <p>Zajęcia odbywać się będą dwa razy w tygodniu i są dostosowane do wszystkich grup wiekowych w naszym żłobku.</p>
+      <p>Warsztaty są bezpłatne dla wszystkich dzieci uczęszczających do naszego żłobka.</p>
+      <p>Szczegółowy harmonogram zostanie przekazany przez wychowawców.</p>
     `
   },
   {
     id: "4",
-    title: "Wiosenne porządki w ogrodzie",
-    date: new Date("2025-04-25"),
-    excerpt: "Wraz z nadejściem wiosny rozpoczynamy przygotowania naszego ogródka. Dzieci wezmą udział w sadzeniu kwiatów i warzyw, co będzie świetną lekcją przyrody.",
+    title: "Nowa sala zabaw już otwarta!",
+    date: new Date("2025-03-28"),
+    excerpt: "Ukończyliśmy prace nad nową salą zabaw wyposażoną w nowoczesny sprzęt edukacyjny. Zapraszamy do obejrzenia galerii.",
     content: `
-      <p>Wraz z nadejściem wiosny rozpoczynamy przygotowania naszego ogródka. Dzieci wezmą udział w sadzeniu kwiatów i warzyw, co będzie świetną lekcją przyrody.</p>
-      <p>W ramach projektu:</p>
+      <p>Z wielką przyjemnością informujemy, że zakończyliśmy prace nad nową salą zabaw w naszym żłobku!</p>
+      <p>Sala została wyposażona w:</p>
       <ul>
-        <li>Posadziliśmy kwiaty i warzywa w naszych grządkach</li>
-        <li>Dzieci nauczyły się jak dbać o rośliny</li>
-        <li>Utworzyliśmy kącik przyrodniczy w każdej sali</li>
+        <li>Nowoczesny sprzęt do zabaw sensorycznych</li>
+        <li>Bezpieczne przyrządy wspierające rozwój motoryki dużej</li>
+        <li>Kąciki tematyczne (kuchnia, warsztat, sklep)</li>
+        <li>Biblioteczkę z książeczkami dostosowanymi do wieku dzieci</li>
+        <li>Interaktywne tablice edukacyjne</li>
       </ul>
-      <p>Dzięki temu projektowi dzieci uczą się odpowiedzialności i bliskości z naturą.</p>
+      <p>Wszystkie instalacje spełniają najwyższe standardy bezpieczeństwa i mają certyfikaty dopuszczenia do użytku przez dzieci.</p>
+      <p>Zapraszamy do obejrzenia galerii zdjęć w naszej placówce!</p>
     `
   },
   {
     id: "5",
-    title: "Rekrutacja dodatkowa na rok 2025/2026",
-    date: new Date("2025-04-20"),
-    excerpt: "Informujemy, że uruchamiamy dodatkową rekrutację na rok szkolny 2025/2026. Mamy jeszcze kilka wolnych miejsc w grupach wiekowych 1-2 i 2-3 lata.",
+    title: "Zmiany w jadłospisie - nowe menu",
+    date: new Date("2025-03-20"),
+    excerpt: "Od kwietnia wprowadzamy nowe, zbilansowane menu opracowane we współpracy z dietetykiem dziecięcym.",
     content: `
-      <p>Informujemy, że uruchamiamy dodatkową rekrutację na rok szkolny 2025/2026. Mamy jeszcze kilka wolnych miejsc w grupach wiekowych 1-2 i 2-3 lata.</p>
-      <p>Rekrutacja potrwa od 20 kwietnia do 20 maja 2025. Aby zapisać dziecko, należy:</p>
+      <p>Drodzy Rodzice,</p>
+      <p>Dbając o zdrowie i prawidłowy rozwój naszych podopiecznych, wprowadzamy nowe menu w naszym żłobku.</p>
+      <p>Nowy jadłospis został opracowany we współpracy z dietetykiem dziecięcym i uwzględnia:</p>
       <ul>
-        <li>Wypełnić formularz zgłoszeniowy dostępny na naszej stronie</li>
-        <li>Złożyć go w sekretariacie żłobka</li>
-        <li>Umówić się na rozmowę kwalifikacyjną</li>
+        <li>Sezonowe warzywa i owoce</li>
+        <li>Pełnoziarniste produkty zbożowe</li>
+        <li>Ograniczenie cukru i soli</li>
+        <li>Różnorodne źródła białka</li>
+        <li>Produkty bogate w wapń i witaminy</li>
       </ul>
-      <p>Zapraszamy do kontaktu, chętnie odpowiemy na wszystkie pytania.</p>
+      <p>Tygodniowy jadłospis będzie wywieszany na tablicy ogłoszeń oraz dostępny na naszej stronie internetowej.</p>
+      <p>Przypominamy o zgłaszaniu wszelkich alergii pokarmowych i specjalnych wymagań dietetycznych u wychowawców.</p>
     `
   }
 ];
 
 // Hook do pobierania wszystkich aktualności
 export const useAllNews = () => {
-  const [news, setNews] = useState<NewsItem[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    // Sortujemy aktualności od najnowszych do najstarszych
-    const sortedNews = [...mockNews].sort((a, b) => 
-      b.date.getTime() - a.date.getTime()
-    );
-    
-    setNews(sortedNews);
-    setIsLoading(false);
-  }, []);
-
-  return { news, isLoading, error };
-};
-
-// Hook do pobierania najnowszych aktualności (limit określa liczbę)
-export const useLatestNews = (limit: number = 3) => {
-  const { news, isLoading, error } = useAllNews();
-  const limitedNews = news.slice(0, limit);
-
-  return { news: limitedNews, isLoading, error };
-};
-
-// Hook do pobierania pojedynczej aktualności po ID
-export const useNewsById = (id: string) => {
-  const [newsItem, setNewsItem] = useState<NewsItem | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const item = mockNews.find(item => item.id === id);
-    
-    if (item) {
-      setNewsItem(item);
-    } else {
-      setError("Nie znaleziono aktualności o podanym ID");
+  return useQuery({
+    queryKey: ["news"],
+    queryFn: async () => {
+      // W przyszłości tutaj będzie zapytanie do API/bazy danych
+      return mockNews.sort((a, b) => b.date.getTime() - a.date.getTime());
     }
-    
-    setIsLoading(false);
-  }, [id]);
+  });
+};
 
-  return { newsItem, isLoading, error };
+// Hook do pobierania konkretnego newsa po ID
+export const useNewsById = (id: string) => {
+  return useQuery({
+    queryKey: ["news", id],
+    queryFn: async () => {
+      // W przyszłości tutaj będzie zapytanie do API/bazy danych
+      const newsItem = mockNews.find(item => item.id === id);
+      if (!newsItem) {
+        throw new Error("Nie znaleziono aktualności o podanym ID");
+      }
+      return newsItem;
+    }
+  });
+};
+
+// Hook do pobierania ograniczonej liczby najnowszych aktualności
+export const useLatestNews = (limit: number = 3) => {
+  const { data: allNews = [], isLoading, error } = useAllNews();
+  
+  const news = allNews.slice(0, limit);
+  
+  return { news, isLoading, error };
 };
